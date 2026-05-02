@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>StrikeProbe Scanner</title>
+</head>
+<body>
+
+<h2>Web Vulnerability Scanner</h2>
+
+<form method="POST">
+    <input type="text" name="url" placeholder="Enter URL" required>
+    <button type="submit">Scan</button>
+</form>
+
+<h3>Results:</h3>
+<ul>
+    {% for r in results %}
+        <li>{{ r }}</li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>
