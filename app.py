@@ -7,24 +7,44 @@ app = Flask(__name__)
 @app.route("/", methods=["GET", "POST"])
 def index():
     results = []
-    risk = "Low"   # default
+    risk = "Low"
+    high_count = 0
+    medium_count = 0
+    low_count = 0
+    pages_scanned = 0
 
     if request.method == "POST":
         url = request.form.get("url")
         results = scan_url(url)
 
-        # 🔹 Risk calculation
-        if any("High" in r for r in results):
+        for r in results:
+            if "High:" in r:
+                high_count += 1
+            elif "Medium:" in r:
+                medium_count += 1
+            elif "Low:" in r:
+                low_count += 1
+
+            if "Total pages scanned:" in r:
+                pages_scanned = r.split(":")[1].strip()
+
+        if high_count > 0:
             risk = "High"
-        elif any("Low" in r for r in results):
+        elif medium_count > 0 or low_count > 0:
             risk = "Medium"
         else:
             risk = "Low"
 
-    return render_template("index.html", results=results, risk=risk)
+    return render_template(
+        "index.html",
+        results=results,
+        risk=risk,
+        high_count=high_count,
+        medium_count=medium_count,
+        low_count=low_count,
+        pages_scanned=pages_scanned
+    )
 
-
-# 🔽 DOWNLOAD REPORT ROUTE (ADD BELOW MAIN ROUTE)
 @app.route("/download")
 def download():
     results = request.args.getlist("result")
@@ -38,7 +58,6 @@ def download():
     file.seek(0)
 
     return send_file(file, as_attachment=True, download_name="report.txt")
-
 
 if __name__ == "__main__":
     app.run(debug=True)
