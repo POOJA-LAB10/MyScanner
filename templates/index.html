@@ -4,9 +4,7 @@
     <title>MyScanner</title>
 
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
@@ -15,10 +13,7 @@
             font-family: Arial, sans-serif;
         }
 
-        .layout {
-            display: flex;
-            min-height: 100vh;
-        }
+        .layout { display: flex; min-height: 100vh; }
 
         .sidebar {
             width: 240px;
@@ -46,10 +41,7 @@
             color: white;
         }
 
-        .main {
-            flex: 1;
-            padding: 35px;
-        }
+        .main { flex: 1; padding: 35px; }
 
         .topbar {
             display: flex;
@@ -91,7 +83,6 @@
             margin-left: 10px;
         }
 
-        /* Loader */
         .loader {
             display: none;
             margin-top: 20px;
@@ -161,20 +152,9 @@
             margin-bottom: 12px;
         }
 
-        .high {
-            background: #7f1d1d;
-            color: #fecaca;
-        }
-
-        .low {
-            background: #78350f;
-            color: #fde68a;
-        }
-
-        .info {
-            background: #334155;
-            color: #e2e8f0;
-        }
+        .high { background: #7f1d1d; color: #fecaca; }
+        .low { background: #78350f; color: #fde68a; }
+        .info { background: #334155; color: #e2e8f0; }
 
         .footer-note {
             color: #94a3b8;
@@ -190,7 +170,6 @@
 
     <div class="sidebar">
         <div class="logo">MyScanner</div>
-
         <div class="menu-item active">Dashboard</div>
         <div class="menu-item">New Scan</div>
         <div class="menu-item">Reports</div>
@@ -205,7 +184,6 @@
                 <h1>Web Vulnerability Scanner</h1>
                 <p style="color:#94a3b8;">Scan web applications for basic security issues</p>
             </div>
-
             <div class="badge">Live Scanner</div>
         </div>
 
@@ -256,6 +234,14 @@
                         {{ r }}
                     </div>
                 {% endfor %}
+
+                <form action="/download" method="get">
+                    {% for r in results %}
+                        <input type="hidden" name="result" value="{{ r }}">
+                    {% endfor %}
+                    <button style="margin-top:15px;">Download Report</button>
+                </form>
+
             {% else %}
                 <div class="result-item info">
                     No scan results yet. Enter a URL and start scanning.
