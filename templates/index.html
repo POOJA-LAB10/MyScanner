@@ -1,83 +1,232 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Web Vulnerability Scanner</title>
+    <title>MyScanner</title>
 
     <style>
-        body {
-            background-color: #0f172a;
-            color: white;
-            font-family: Arial;
-            text-align: center;
-            padding: 50px;
+        * {
+            box-sizing: border-box;
         }
 
-        h1 {
+        body {
+            margin: 0;
+            background: #0f172a;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: #020617;
+            padding: 25px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
             color: #38bdf8;
+            margin-bottom: 40px;
+        }
+
+        .menu-item {
+            padding: 14px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            color: #cbd5e1;
+            background: #111827;
+        }
+
+        .menu-item.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .main {
+            flex: 1;
+            padding: 35px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .badge {
+            background: #14532d;
+            color: #86efac;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .scan-box {
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 16px;
+            margin-top: 30px;
         }
 
         input {
-            padding: 10px;
-            width: 300px;
-            border-radius: 5px;
+            width: 70%;
+            padding: 14px;
+            border-radius: 8px;
             border: none;
+            font-size: 16px;
         }
 
         button {
-            padding: 10px 20px;
-            background-color: #38bdf8;
+            padding: 14px 24px;
             border: none;
-            border-radius: 5px;
-            color: black;
+            border-radius: 8px;
+            background: #38bdf8;
+            color: #020617;
+            font-weight: bold;
             cursor: pointer;
+            margin-left: 10px;
         }
 
-        .card {
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-top: 30px;
+        }
+
+        .summary-card {
+            background: #1e293b;
+            padding: 22px;
+            border-radius: 16px;
+        }
+
+        .summary-card h3 {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 15px;
+        }
+
+        .summary-card p {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 10px 0 0;
+        }
+
+        .results {
+            background: #1e293b;
+            margin-top: 30px;
+            border-radius: 16px;
+            padding: 25px;
+        }
+
+        .result-item {
             padding: 15px;
-            margin: 10px auto;
-            width: 300px;
-            border-radius: 8px;
+            border-radius: 10px;
+            margin-bottom: 12px;
         }
 
         .high {
-            background-color: #7f1d1d;
-            color: #fca5a5;
+            background: #7f1d1d;
+            color: #fecaca;
         }
 
         .low {
-            background-color: #78350f;
-            color: #fcd34d;
+            background: #78350f;
+            color: #fde68a;
         }
 
         .info {
-            background-color: #1e293b;
-            color: white;
+            background: #334155;
+            color: #e2e8f0;
+        }
+
+        .footer-note {
+            color: #94a3b8;
+            margin-top: 20px;
+            font-size: 14px;
         }
     </style>
 </head>
 
 <body>
 
-    <h1>Web Vulnerability Scanner</h1>
+<div class="layout">
 
-    <form method="POST">
-        <input type="text" name="url" placeholder="Enter URL" required>
-        <br><br>
-        <button type="submit">Scan</button>
-    </form>
+    <div class="sidebar">
+        <div class="logo">MyScanner</div>
 
-    <h2>Results:</h2>
+        <div class="menu-item active">Dashboard</div>
+        <div class="menu-item">New Scan</div>
+        <div class="menu-item">Reports</div>
+        <div class="menu-item">Security Checks</div>
+        <div class="menu-item">Settings</div>
+    </div>
 
-    {% if results %}
-        {% for r in results %}
-            <div class="card 
-                {% if 'High' in r %} high 
-                {% elif 'Low' in r %} low 
-                {% else %} info {% endif %}">
-                {{ r }}
+    <div class="main">
+
+        <div class="topbar">
+            <div>
+                <h1>Web Vulnerability Scanner</h1>
+                <p style="color:#94a3b8;">Scan web applications for basic security issues</p>
             </div>
-        {% endfor %}
-    {% endif %}
+
+            <div class="badge">Live Scanner</div>
+        </div>
+
+        <div class="scan-box">
+            <h2>Start New Scan</h2>
+
+            <form method="POST">
+                <input type="text" name="url" placeholder="Enter target URL" required>
+                <button type="submit">Start Scan</button>
+            </form>
+
+            <p class="footer-note">Only scan websites you own or have permission to test.</p>
+        </div>
+
+        <div class="cards">
+            <div class="summary-card">
+                <h3>Scan Status</h3>
+                <p>Active</p>
+            </div>
+
+            <div class="summary-card">
+                <h3>Risk Level</h3>
+                <p>Medium</p>
+            </div>
+
+            <div class="summary-card">
+                <h3>Checks</h3>
+                <p>{{ results|length if results else 0 }}</p>
+            </div>
+        </div>
+
+        <div class="results">
+            <h2>Scan Results</h2>
+
+            {% if results %}
+                {% for r in results %}
+                    <div class="result-item
+                        {% if 'High' in r %} high
+                        {% elif 'Low' in r %} low
+                        {% else %} info {% endif %}">
+                        {{ r }}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="result-item info">
+                    No scan results yet. Enter a URL and start scanning.
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+</div>
 
 </body>
 </html>
