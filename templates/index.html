@@ -1,23 +1,66 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>StrikeProbe Scanner</title>
+    <title>Web Vulnerability Scanner</title>
+
+    <style>
+        body {
+            background-color: #0f172a;
+            color: white;
+            font-family: Arial;
+            text-align: center;
+            padding: 50px;
+        }
+
+        h1 {
+            color: #38bdf8;
+        }
+
+        input {
+            padding: 10px;
+            width: 300px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #38bdf8;
+            border: none;
+            border-radius: 5px;
+            color: black;
+            cursor: pointer;
+        }
+
+        .card {
+            background-color: #1e293b;
+            padding: 15px;
+            margin: 10px auto;
+            width: 300px;
+            border-radius: 8px;
+        }
+    </style>
 </head>
+
 <body>
 
-<h2>Web Vulnerability Scanner</h2>
+    <h1>Web Vulnerability Scanner</h1>
 
-<form method="POST">
-    <input type="text" name="url" placeholder="Enter URL" required>
-    <button type="submit">Scan</button>
-</form>
+    <form method="POST">
+        <input type="text" name="url" placeholder="Enter URL" required>
+        <br><br>
+        <button type="submit">Scan</button>
+    </form>
 
-<h3>Results:</h3>
-<ul>
-    {% for r in results %}
-        <li>{{ r }}</li>
-    {% endfor %}
-</ul>
+    <h2>Results:</h2>
+
+    {% if results %}
+        {% for r in results %}
+            <div class="card">
+                {{ r }}
+            </div>
+        {% endfor %}
+    {% endif %}
 
 </body>
 </html>
