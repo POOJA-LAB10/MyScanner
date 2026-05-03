@@ -33,11 +33,25 @@
         }
 
         .card {
-            background-color: #1e293b;
             padding: 15px;
             margin: 10px auto;
             width: 300px;
             border-radius: 8px;
+        }
+
+        .high {
+            background-color: #7f1d1d;
+            color: #fca5a5;
+        }
+
+        .low {
+            background-color: #78350f;
+            color: #fcd34d;
+        }
+
+        .info {
+            background-color: #1e293b;
+            color: white;
         }
     </style>
 </head>
@@ -56,7 +70,10 @@
 
     {% if results %}
         {% for r in results %}
-            <div class="card">
+            <div class="card 
+                {% if 'High' in r %} high 
+                {% elif 'Low' in r %} low 
+                {% else %} info {% endif %}">
                 {{ r }}
             </div>
         {% endfor %}
