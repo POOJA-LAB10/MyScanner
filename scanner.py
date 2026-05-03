@@ -1,27 +1,34 @@
 import requests
-from bs4 import BeautifulSoup
 
 def scan_url(url):
     results = []
 
     try:
-        response = requests.get(url, timeout=5)
-        soup = BeautifulSoup(response.text, "html.parser")
+        response = requests.get(url, timeout=10)
 
-        # Find forms
-        forms = soup.find_all("form")
-        results.append(f"Forms found: {len(forms)}")
+        # Basic info
+        results.append(f"Status Code: {response.status_code}")
 
-        # Basic XSS test
-        test_script = "<script>alert(1)</script>"
-        if test_script in response.text:
-            results.append("Possible XSS vulnerability detected")
+        # 🔹 XSS Test
+        xss_payload = "<script>alert(1)</script>"
+        if xss_payload in response.text:
+            results.append("High: Possible XSS vulnerability")
 
-        # Get links
-        links = soup.find_all("a")
-        results.append(f"Links found: {len(links)}")
+        # 🔹 SQL Injection Test
+        sqli_payload = "' OR '1'='1"
+        if sqli_payload in response.text:
+            results.append("High: Possible SQL Injection")
 
+        # 🔹 Security Headers Check
+        if "X-Frame-Options" not in response.headers:
+            results.append("Low: Missing X-Frame-Options header")
+
+        if "Content-Security-Policy" not in response.headers:
+            results.append("Low: Missing Content-Security-Policy")
+
+    except requests.exceptions.Timeout:
+        results.append("Error: Website timeout")
     except Exception as e:
-        results.append(f"Error: {e}")
+        results.append(f"Error: {str(e)}")
 
     return results
