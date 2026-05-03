@@ -5,7 +5,7 @@ def scan_url(url):
     results = []
 
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=5)
         soup = BeautifulSoup(response.text, "html.parser")
 
         # Find forms
